@@ -9,7 +9,9 @@ class r10k::install::gem (
     rubygems_update => false,
   }
 
-  include ruby::dev
+  class { 'ruby::dev':
+    ruby_dev_packages => ['ruby-devel'],
+  }
 
   # Explicit dependency chaining to make sure the system is ready to compile
   # native extentions for dependent rubygems by the time r10k installation
