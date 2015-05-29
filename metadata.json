@@ -79,8 +79,8 @@
       "version_requirement": ">= 0.1.2"
     },
     {
-      "name": "puppetlabs/git",
-      "version_requirement": ">= 0.0.3"
+      "name": "theforeman/git",
+      "version_requirement": ">= 1.4.0"
     },
     {
       "name": "gentoo/portage",
