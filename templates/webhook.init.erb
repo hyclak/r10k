@@ -1,5 +1,5 @@
 #!/bin/bash
-# webhook        Init script for running the r10k webhook daemon
+# webhook       Init script for running the r10k webhook daemon
 #
 # Author:       Zack Smith <zack.smith@puppetlabs.com>
 #
@@ -9,13 +9,20 @@
 # processname: webhook
 
 [ -f /etc/sysconfig/webhook ] && . /etc/sysconfig/webhook
+
+# This is for ubuntu 14.04 (/var/run is mount to tmpfs)
+if [ ! -d /var/run/webhook ]; then
+  mkdir -p /var/run/webhook
+  chown <%= @user %> /var/run/webhook
+fi
+
 pidfile='/var/run/webhook/webhook.pid'
 webhook='/usr/local/bin/webhook'
 DAEMON_USER='<%= @user %>'
 RETVAL=0
 
 # Source function library.
-. /etc/rc.d/init.d/functions
+. <%= scope.lookupvar('r10k::params::functions_path') %>
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 export PATH
@@ -23,22 +30,22 @@ export PATH
 start() {
     echo
     echo -n $"Starting webhook: "
-    daemon --user ${DAEMON_USER:?} --pidfile $pidfile $webhook
+    <% if @osfamily == 'Debian' -%>
+    start-stop-daemon --start --chuid ${DAEMON_USER} --user ${DAEMON_USER:?} <%= scope.lookupvar('r10k::params::start_pidfile_args') %> --startas=$webhook
+    <% elsif @osfamily == 'SUSE' -%>
+    start_daemon -u $DAEMON_USER -p $pidfile -f $webhook
+    <% else -%>
+    daemon --user ${DAEMON_USER:?} <%= scope.lookupvar('r10k::params::start_pidfile_args') %> $webhook
+    <% end -%>
     RETVAL=$?
     return $RETVAL
 }
 
 stop() {
     echo -n $"Stopping webhook: "
-    pid=`netstat -lnp | awk  '/.*:8088.*ruby/{sub("/.*","",$NF);print $NF}'`
-    #killproc -p $pidfile $webhook]
-    if kill -9 $pid ; then
-      success 'webhook'
-      return 0
-    else
-      failure 'webhook'
-      return 1
-    fi
+    killproc -p $pidfile $webhook
+    RETVAL=$?
+    return $RETVAL
 }
 
 restart() {
@@ -48,7 +55,13 @@ restart() {
 
 status() {
     if [ -f "${pidfile}" ]; then
+    <% if @osfamily == 'Debian' -%>
+        status_of_proc -p $pidfile $webhook
+    <% elsif @osfamily == 'SUSE' -%>
+        checkproc -k -p $pidfile $webhook
+    <% else -%>
         status -p $pidfile $webhook
+    <% end -%>
         RETVAL=$?
     else
         RETVAL=3

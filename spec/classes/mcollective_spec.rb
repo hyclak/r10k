@@ -13,30 +13,79 @@ describe 'r10k::mcollective' , :type => 'class' do
     it { should contain_file("/opt/puppet/libexec/mcollective/mcollective/application/r10k.rb").with(
         'ensure'   => 'present',
         'owner'    => 'root',
-        'group'    => 'root',
-        'mode'     => '0644',
-        'notify'   => 'Service[pe-mcollective]'
+        'group'    => '0',
+        'mode'     => '0644'
       )
     }
     it { should contain_file("/opt/puppet/libexec/mcollective/mcollective/agent/r10k.ddl").with(
         'ensure'   => 'present',
         'owner'    => 'root',
-        'group'    => 'root',
-        'mode'     => '0644',
-        'notify'   => 'Service[pe-mcollective]'
+        'group'    => '0',
+        'mode'     => '0644'
       )
     }
 
     it { should contain_file("/opt/puppet/libexec/mcollective/mcollective/agent/r10k.rb").with(
         'ensure'   => 'present',
         'owner'    => 'root',
-        'group'    => 'root',
-        'mode'     => '0644',
-        'notify'   => 'Service[pe-mcollective]'
+        'group'    => '0',
+        'mode'     => '0644'
       )
     }
 
+    it {
+      should contain_file("/opt/puppet/libexec/mcollective/mcollective/agent/r10k.rb").
+        with_content(/\"GIT_SSL_NO_VERIFY\" => \"0\"/)
+    }
+
   end
+
+  context "Allows you to set git_ssl_no_verify for r10k file" do
+    let :facts do
+      {
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '5',
+        :operatingsystem        => 'Centos',
+        :is_pe                  => 'true'
+      }
+    end
+
+    let :params do
+      {
+        :git_ssl_no_verify => 1,
+      }
+    end
+
+    it {
+      should contain_file("/opt/puppet/libexec/mcollective/mcollective/agent/r10k.rb").
+        with_content(/\"GIT_SSL_NO_VERIFY\" => \"1\"/)
+    }
+
+  end
+
+    context "Allows you to set git_ssl_verify for r10k file (deprecated - to be removed in major bump)" do
+    let :facts do
+      {
+        :osfamily               => 'RedHat',
+        :operatingsystemrelease => '5',
+        :operatingsystem        => 'Centos',
+        :is_pe                  => 'true'
+      }
+    end
+
+    let :params do
+      {
+        :git_ssl_verify => 1,
+      }
+    end
+
+    it {
+      should contain_file("/opt/puppet/libexec/mcollective/mcollective/agent/r10k.rb").
+        with_content(/\"GIT_SSL_NO_VERIFY\" => \"1\"/)
+    }
+
+  end
+
   context "Puppet FOSS on a RedHat 5 OS installing mcollective agent & application" do
     let :facts do
       {
@@ -50,26 +99,23 @@ describe 'r10k::mcollective' , :type => 'class' do
     it { should contain_file("/usr/libexec/mcollective/mcollective/application/r10k.rb").with(
         'ensure'   => 'present',
         'owner'    => 'root',
-        'group'    => 'root',
-        'mode'     => '0644',
-        'notify'   => 'Service[mcollective]'
+        'group'    => '0',
+        'mode'     => '0644'
       )
     }
     it { should contain_file("/usr/libexec/mcollective/mcollective/agent/r10k.ddl").with(
         'ensure'   => 'present',
         'owner'    => 'root',
-        'group'    => 'root',
-        'mode'     => '0644',
-        'notify'   => 'Service[mcollective]'
+        'group'    => '0',
+        'mode'     => '0644'
       )
     }
 
     it { should contain_file("/usr/libexec/mcollective/mcollective/agent/r10k.rb").with(
         'ensure'   => 'present',
         'owner'    => 'root',
-        'group'    => 'root',
-        'mode'     => '0644',
-        'notify'   => 'Service[mcollective]'
+        'group'    => '0',
+        'mode'     => '0644'
       )
     }
   end
@@ -88,27 +134,24 @@ describe 'r10k::mcollective' , :type => 'class' do
     it { should contain_file("/usr/share/mcollective/plugins/mcollective/application/r10k.rb").with(
         'ensure'   => 'present',
         'owner'    => 'root',
-        'group'    => 'root',
-        'mode'     => '0644',
-        'notify'   => 'Service[mcollective]'
+        'group'    => '0',
+        'mode'     => '0644'
       )
     }
 
     it { should contain_file("/usr/share/mcollective/plugins/mcollective/agent/r10k.ddl").with(
         'ensure'   => 'present',
         'owner'    => 'root',
-        'group'    => 'root',
-        'mode'     => '0644',
-        'notify'   => 'Service[mcollective]'
+        'group'    => '0',
+        'mode'     => '0644'
       )
     }
 
     it { should contain_file("/usr/share/mcollective/plugins/mcollective/agent/r10k.rb").with(
         'ensure'   => 'present',
         'owner'    => 'root',
-        'group'    => 'root',
-        'mode'     => '0644',
-        'notify'   => 'Service[mcollective]'
+        'group'    => '0',
+        'mode'     => '0644'
       )
     }
   end

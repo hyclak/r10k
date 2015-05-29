@@ -10,9 +10,6 @@
 # * [*sources*]
 #   Hash containing data sources to be used by r10k to create dynamic Puppet
 #   environments. Default: {}
-# * [*purgedirs*]
-#   An Array of directory paths to purge of any subdirectories that do not
-#   correspond to a dynamic environment managed by r10k. Default: []
 # * [*manage_configfile_symlink*]
 #   Boolean to determine if a symlink to the r10k config file is to be managed.
 #   Default: false
@@ -32,10 +29,6 @@
 #        'basedir' => '/some/other/basedir'
 #      },
 #    },
-#    purgedirs => [
-#      "${::settings::confdir}/environments",
-#      '/some/other/basedir',
-#    ],
 #  }
 #
 # == Documentation
@@ -53,16 +46,16 @@ class r10k::config (
   $modulepath                = undef,
   $remote                    = '',
   $sources                   = 'UNSET',
-  $purgedirs                 = [],
   $puppetconf_path           = $r10k::params::puppetconf_path,
   $r10k_basedir              = $r10k::params::r10k_basedir,
   $manage_configfile_symlink = $r10k::params::manage_configfile_symlink,
   $configfile_symlink        = '/etc/r10k.yaml',
+  $r10k_yaml_template        = 'r10k/r10k.yaml.erb'
 ) inherits r10k::params {
 
   validate_bool($manage_modulepath)
 
-  if type($manage_configfile_symlink) == 'string' {
+  if is_string($manage_configfile_symlink) {
     $manage_configfile_symlink_real = str2bool($manage_configfile_symlink)
   } else {
     $manage_configfile_symlink_real = $manage_configfile_symlink
@@ -92,7 +85,7 @@ class r10k::config (
     group   => '0',
     mode    => '0644',
     path    => $configfile,
-    content => template('r10k/r10k.yaml.erb'),
+    content => template($r10k_yaml_template),
   }
 
   if $manage_configfile_symlink_real == true {

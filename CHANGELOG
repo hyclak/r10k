@@ -1,3 +1,66 @@
+2.8.0 - Tom linkin
+  * Support for systemd on EL7 for webhook
+2.7.4 - Rob Nelson
+  * Fix #162 for FOSS ruby 1.8.7 webhook.yaml issues
+2.7.3 - esalberg
+ * Regression from 2.7.1
+2.7.2 - Federico Voges & Ben ford
+ * Fix #155 gem install issues with arguments
+2.7.1 - Alex Scoble & esalberg & annaken
+ * Fix webhook directory permissions #144
+ * Fix gem dep regression #154
+ * Update gem version for pulled release.
+2.7.0 - Zack Smith
+  * Updates for Puppet Enterprise 3.8 and its embeded r10k
+  * Update default r10k version with that which will ship in PE 3.8 
+2.6.5 - spidersddd
+  * Fix #147 for Ubuntu 14.0.4
+2.6.4 - Zack Smith & Corey Osman
+  * Fix conditional for pe 3.7 cert upgrade hack
+2.6.3 - Eli Young
+  * Ordering issues #134 & #138
+2.6.2 - harrytford
+  * Webhook new installs fix #132
+2.6.1 - Gary Larizza
+  * Fix "local" non mcollective hook tiggers to add '-p'
+  * See #125 , this will cause any current users to default to turning this on 
+2.6.0 - Eli Young & Ranjit Viswakumar
+  * Add bind_address to webhook
+  * bump r10k version to 1.4.1  
+2.5.4 -  Zack Smith
+  * Fix webhook init script issue
+2.5.3 -  Eli Young & te206676
+  * Ubuntu Support for Webhook #118
+  * Permissions on Certificate #119
+2.5.2 -  Chris Roddy
+  * Fixed missing make dep, will be removed in 3.x release of module
+2.5.1 -  Zack Smith
+  * README updates
+2.5.0 -  Zack Smith & Sean Keery
+  * Puppet Enterprise 3.7 compatibility
+  * Fixed bugs #108,#110,#110,#111
+  * Support for /module end point in webhook to run r10k module deploy foo
+2.4.4 - Eli Young & Igor Galić
+  * prevent potential leakage Resource defaults for ini
+  *     Handle branch names containing slashes
+2.4.3 - Zack Smith
+  * Documentation Updates
+2.4.1 - Zack Smith
+  * Documentation Updates
+2.4.0 - Zack Smith
+  * Bump r10k version
+2.3.4 - Eli Young
+  * Webhook fixes for reboots + refreshes
+2.3.3 - Zach Leslie + misterdom
+  * Fix for #97
+2.3.2 - Zach Leslie + misterdom
+  * Fix for #96
+2.3.1 - Ben Ford
+  * Fix for #87
+2.3.0 - Zack Smith
+ * Fold in #78, #75 and #73
+2.2.7 - Zack Smith
+ * Bugfix for mcollective during puppet apply and webhook as non mco
 2.2.7 - Zack Smith
  * forge cut
 2.2.6 - Zack Smith
@@ -10,7 +73,7 @@
  * Remove PID file creation from webhook
 2.1.2 - Garrett Honeycutt & Zack Smith
  * Fix quoting issue created by #24 with booleans with #54
- * Intial commit of fucntional tested github authenticated webhook
+ * Intial commit of functionally tested github authenticated webhook
 2.1.1 - Zack Smith
  * Add SSL and auth support to webhook
 2.1.0 - Zack Smith
